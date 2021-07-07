@@ -1,0 +1,114 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://Pong 2/Ball/Ball.jpg" type="Texture" id=1]
+[ext_resource path="res://Pong 2/Paddle/Paddle.jpg" type="Texture" id=2]
+[ext_resource path="res://Pong 2/Paddle/Paddle.gd" type="Script" id=3]
+[ext_resource path="res://Pong 2/Ball/Ball.gd" type="Script" id=4]
+[ext_resource path="res://Pong 2/World/World Scene.gd" type="Script" id=5]
+[ext_resource path="res://Pong 2/Boundaries/BounceBoundary.gd" type="Script" id=6]
+[ext_resource path="res://Pong 2/Boundaries/Goal.gd" type="Script" id=7]
+[ext_resource path="res://Pong 2/Scoreboard/Scoreboard.gd" type="Script" id=8]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 0.5, 0.5 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 0.5, 0.5 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 160, 1 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 1, 90 )
+
+[node name="World Scene" type="Node2D"]
+script = ExtResource( 5 )
+
+[node name="Ball" type="Area2D" parent="."]
+position = Vector2( 160, 90 )
+scale = Vector2( 2, 2 )
+script = ExtResource( 4 )
+
+[node name="Sprite" type="Sprite" parent="Ball"]
+texture = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ball"]
+shape = SubResource( 1 )
+
+[node name="LeftPaddle" type="Area2D" parent="."]
+position = Vector2( 32, 90 )
+scale = Vector2( 1, 20 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite" type="Sprite" parent="LeftPaddle"]
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftPaddle"]
+shape = SubResource( 2 )
+
+[node name="RightPaddle" type="Area2D" parent="."]
+position = Vector2( 288, 90 )
+scale = Vector2( 1, 20 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite" type="Sprite" parent="RightPaddle"]
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightPaddle"]
+shape = SubResource( 2 )
+
+[node name="Ceiling" type="Area2D" parent="."]
+position = Vector2( 160, -1 )
+script = ExtResource( 6 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ceiling"]
+shape = SubResource( 3 )
+
+[node name="Floor" type="Area2D" parent="."]
+position = Vector2( 160, 181 )
+script = ExtResource( 6 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+shape = SubResource( 3 )
+
+[node name="LeftGoal" type="Area2D" parent="."]
+position = Vector2( 0, 90 )
+script = ExtResource( 7 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftGoal"]
+shape = SubResource( 4 )
+
+[node name="RightGoal" type="Area2D" parent="."]
+position = Vector2( 320, 90 )
+script = ExtResource( 7 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightGoal"]
+shape = SubResource( 4 )
+
+[node name="Label" type="Label" parent="."]
+margin_right = 320.0
+margin_bottom = 16.0
+text = "0 - 0"
+align = 1
+valign = 1
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="move" from="Ball" to="LeftPaddle" method="_on_Ball_move"]
+[connection signal="move" from="Ball" to="RightPaddle" method="_on_Ball_move"]
+[connection signal="area_entered" from="LeftPaddle" to="LeftPaddle" method="_on_Paddle_area_entered"]
+[connection signal="area_entered" from="RightPaddle" to="RightPaddle" method="_on_Paddle_area_entered"]
+[connection signal="area_entered" from="Ceiling" to="Ceiling" method="_on_Boundary_area_entered"]
+[connection signal="area_entered" from="Floor" to="Floor" method="_on_Boundary_area_entered"]
+[connection signal="area_entered" from="LeftGoal" to="LeftGoal" method="_on_Goal_area_entered"]
+[connection signal="area_entered" from="LeftGoal" to="Label" method="_on_LeftGoal_area_entered"]
+[connection signal="area_entered" from="RightGoal" to="RightGoal" method="_on_Goal_area_entered"]
+[connection signal="area_entered" from="RightGoal" to="Label" method="_on_RightGoal_area_entered"]
